@@ -1,12 +1,36 @@
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
-
-version: '3.4'
-
 services:
   pokefaces:
     image: pokefaces
+    container_name: Pokefaces
     build:
       context: .
       dockerfile: PokeFaces/Dockerfile
     ports:
       - 6000:6000
+    networks:
+      pokefaces:
+        ipv4_address: 178.20.10.1
+  pokefaces.db:
+    image: postgres:17.0-alpine3.20
+    environment:
+      - POSTGRES_USER=${POSS_USER}
+      - POSTGRES_PASSWORD=${POSS_PASS}
+    expose:
+      - 5432
+    ports:
+      - 6001:5432
+    networks:
+      pokefaces:
+        ipv4_address: 178.20.10.2
+    volumes:
+      - pokefaces:/var/lib/postgres
+volumes:
+  pokefaces:
+    external: false
+networks:
+  pokefaces:
+    ipam:
+      config:
+        - subnet: 178.20.10.0/10
+          gateway: 178.20.10.10
