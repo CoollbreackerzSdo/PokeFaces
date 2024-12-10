@@ -10,7 +10,9 @@ services:
       - 6000:6000
     networks:
       pokefaces:
-        ipv4_address: 178.20.10.1
+        ipv4_address: 178.0.0.1
+    volumes:
+      - "./assets:/assets:ro"
   pokefaces.db:
     image: postgres:17.0-alpine3.20
     environment:
@@ -22,7 +24,7 @@ services:
       - 6001:5432
     networks:
       pokefaces:
-        ipv4_address: 178.20.10.2
+        ipv4_address: 178.0.0.2
     volumes:
       - pokefaces:/var/lib/postgres
 volumes:
@@ -32,5 +34,5 @@ networks:
   pokefaces:
     ipam:
       config:
-        - subnet: 178.20.10.0/10
-          gateway: 178.20.10.10
+        - subnet: 178.0.0.0/10
+          gateway: 178.0.0.10
